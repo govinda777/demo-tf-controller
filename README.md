@@ -91,3 +91,10 @@ kubectl create secret generic tf-aws-keys \
 -n flux-system \
 --from-literal=access_key=$AWS_ACESS_KEI_ID \
 --from-literal=secret_key=$AWS_SECRET_ACESS_KEY
+
+15 - Instale o TF Controller no cluster
+
+
+
+16 - Atach repository IAC terraform files
+
