@@ -1,46 +1,19 @@
-# demo-tf-controller
-POC - TF Controller + Lambda + Api GW
+# fleet-infra
 
-## pré requisitos
+## Como usar a UI
 
-- minikube
-- kubectl
-- kind
-- flux
+kubectl port-forward svc/ww-gitops-weave-gitops -n flux-system 9001:9001;
 
-1 - Instal minikube
+## 
 
-arch -arm64 /bin/bash -c "$(curl -fsSL <https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)">
+export GITHUB_TOKEN=<YOUR_GITHUB_TOKEN_PAT>
 
-arch -arm64 brew install minikube
+export GITHUB_USER=<YOUR_GITHUB_USER>
 
-2 - Start minikube
+export AWS_ACESS_KEI_ID=<YOUR_AWS_ACESS_KEI_ID>
 
-minikube start
+export AWS_SECRET_ACESS_KEY=<YOUR_AWS_SECRET_ACESS_KEY>
 
-3 - Install kubectl
-
-4 - Install kind
-
-brew install kind
-
-
-5 - Instalar Flux
-
-brew install fluxcd/tap/flux
-
-6 - Configure seus acessos
-
-export GITHUB_TOKEN=<your-token>
-export GITHUB_USER=<your-username>
-
-Libere acesso a Push e Pull no seu repositório
-
-7 - Verifique se o Flux está configurado corretamente
-
-flux check --pre
-
-8 - Instale o Flux em seu cluster
 
 flux bootstrap github \
   --owner=$GITHUB_USER \
@@ -50,25 +23,26 @@ flux bootstrap github \
   --personal \
   --components-extra image-reflector-controller,image-automation-controller
 
+## How to enable UI 
 
-9 - Instale o GitOps
+- Instale o GitOps
 
 brew tap weaveworks/tap
 brew install weaveworks/tap/gitops
 
-10 - Crie  HelmRepository and HelmRelease to deploy Weave GitOps
+- Crie  HelmRepository and HelmRelease to deploy Weave GitOps
 
-PASSWORD="hermes1"
+export PASSWORD="hermes1"
 gitops create dashboard ww-gitops \
   --password=$PASSWORD \
   --export > ./clusters/my-cluster/weave-gitops-dashboard.yaml
 
-11 - Suba as alteracoes
+- Suba as alteracoes
 
 git add -A && git commit -m "Add Weave GitOps Dashboard"
 git push
 
-12 - Veja os pods em execucao
+- Veja os pods em execucao
 
 kubectl get pods -n flux-system
 
@@ -83,7 +57,7 @@ source-controller-fc5555fb-p9fxx               1/1     Running   0          11m
 ww-gitops-weave-gitops-9c86dc9f-dhk55          1/1     Running   0          93s
 ➜ fleet-infra (main) ✔ 
 
-13 - Acessa a UI
+- Acessa a UI
 
 kubectl port-forward svc/ww-gitops-weave-gitops -n flux-system 9001:9001
 
@@ -92,14 +66,20 @@ password hermes1
 
 http://localhost:9001/
 
-14 - Configure sua chave AWS no cluster
+## Apply & Destroy
 
-kubectl create secret generic tf-aws-keys \
--n flux-system \
---from-literal=access_key=$AWS_ACESS_KEI_ID \
---from-literal=secret_key=$AWS_SECRET_ACESS_KEY
+chmod +x destroy.sh
+chmod +x apply.sh
+
+## Como forçar um reconcile
+
+flux reconcile source git flux-system
 
 
-17 - Atach repository IAC terraform files
+## Manual apply
 
-tfctl reconcile terraform <nome-do-recurso>
+kubectl apply -f aws-credentials.yaml -n flux-system
+kubectl apply -f iac-instance-ec2_repo.yaml -n flux-system
+kubectl apply -f iac-instance-ec2_terraform.yaml -n flux-system
+
+kubectl delete pod iac-instance-ec2-tf-runner -n flux-system
