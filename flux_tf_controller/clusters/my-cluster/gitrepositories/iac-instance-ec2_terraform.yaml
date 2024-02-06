@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   path: ./
-  approvePlan: "plan-main-2d31eb5bfe"
+  approvePlan: ""
   destroyResourcesOnDeletion: true
   interval: 5s
   sourceRef:
