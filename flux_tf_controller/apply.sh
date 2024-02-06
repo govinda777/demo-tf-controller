@@ -1,6 +1,6 @@
 source .env
 
-minikube start  --profile flux --driver=docker
+minikube start  --profile flux --driver=docker --cpus 4 --memory 2000
 
 arch -arm64 brew install fluxcd/tap/flux
 
@@ -35,4 +35,15 @@ gitops create dashboard ww-gitops \
   --export > ./clusters/my-cluster/weave-gitops-dashboard.yaml
 
 kubectl get pods -n flux-system
+
+
+flux reconcile source git flux-system
+
+brew install weaveworks/tap/tfctl
+
+tfctl install --namespace flux-system --version 0.0.1
+
+tfctl plan
+
+
 
