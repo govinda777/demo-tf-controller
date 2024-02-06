@@ -88,6 +88,7 @@ kubectl apply -f iac-instance-ec2_terraform.yaml -n flux-system
 kubectl delete pod iac-instance-ec2-tf-runner -n flux-system
 
 
+
 kubectl get terraform -n flux-system
 
 kubectl logs -n flux-system iac-instance-ec2-tf-runner
