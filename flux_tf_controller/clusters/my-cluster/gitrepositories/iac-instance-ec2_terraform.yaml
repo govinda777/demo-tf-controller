@@ -1,18 +1,18 @@
-# apiVersion: infra.contrib.fluxcd.io/v1alpha2
-# kind: Terraform
-# metadata:
-#   name: iac-instance-ec2
-#   namespace: flux-system
-# spec:
-#   path: ./
-#   approvePlan: ""
-#   destroyResourcesOnDeletion: true
-#   interval: 5s
-#   sourceRef:
-#     kind: GitRepository
-#     name: iac-instance-ec2
-#   runnerPodTemplate:
-#     spec:
-#       envFrom:
-#       - secretRef:
-#           name: aws-credentials
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: iac-instance-ec2
+  namespace: flux-system
+spec:
+  path: ./
+  approvePlan: "plan-main-2d31eb5bfe"
+  destroyResourcesOnDeletion: true
+  interval: 5s
+  sourceRef:
+    kind: GitRepository
+    name: iac-instance-ec2
+  runnerPodTemplate:
+    spec:
+      envFrom:
+      - secretRef:
+          name: aws-credentials
