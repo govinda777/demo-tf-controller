@@ -91,3 +91,7 @@ tfctl replan iac-instance-ec2 -n flux-system --request-timeout 20m
 tfctl approve iac-instance-ec2 -n flux-system --request-timeout 20m
 
 tfctl reconcile iac-instance-ec2 -n flux-system --request-timeout 20m
+
+kubectl get terraform -n flux-system
+
+kubectl get logs -n flux-system iac-instance-ec2
