@@ -36,10 +36,13 @@ gitops create dashboard ww-gitops \
 
 kubectl get pods -n flux-system
 
+echo 'Flux reconcile source git flux-system...'
 
 flux reconcile source git flux-system
 
-brew install weaveworks/tap/tfctl
+echo 'Install tfctl...'
+
+arch -arm64 brew install weaveworks/tap/tfctl
 
 tfctl install --namespace flux-system --version 0.0.1
 
