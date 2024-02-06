@@ -2,7 +2,7 @@ source .env
 
 minikube start  --profile flux --driver=docker
 
-brew install fluxcd/tap/flux
+arch -arm64 brew install fluxcd/tap/flux
 
 flux check --pre
 
@@ -10,9 +10,10 @@ kubectl config current-context
 
 flux bootstrap github \
   --owner=$GITHUB_USER \
-  --repository=fleet-infra \
+  --repository=demo-tf-controller \
   --branch=main \
-  --path=./clusters/my-cluster \
+  --path=./flux_tf_controller/clusters/my-cluster \
+  --timeout=90m \
   --personal \
   --components-extra image-reflector-controller,image-automation-controller
 
@@ -25,8 +26,8 @@ kubectl config current-context
 
 # Config UI
 
-brew tap weaveworks/tap
-brew install weaveworks/tap/gitops
+arch -arm64 brew tap weaveworks/tap
+arch -arm64 brew install weaveworks/tap/gitops
 
 export PASSWORD="hermes1"
 gitops create dashboard ww-gitops \
