@@ -17,10 +17,16 @@ flux bootstrap github \
   --personal \
   --components-extra image-reflector-controller,image-automation-controller
 
+echo 'Create aws-credentials secret...'
+
+echo $AWS_ACCESS_KEY_ID
+echo $AWS_SECRET_ACCESS_KEY
+
 kubectl create secret generic aws-credentials \
---namespace=flux-system \
---from-literal=AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
---from-literal=AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+  --namespace=flux-system \
+  --from-literal=AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  --from-literal=AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+  --from-literal=AWS_REGION=us-east-2
 
 kubectl config current-context
 
@@ -44,9 +50,7 @@ echo 'Install tfctl...'
 
 arch -arm64 brew install weaveworks/tap/tfctl
 
-tfctl install --namespace flux-system --version 0.0.1
-
-tfctl plan
+tfctl install --namespace flux-system
 
 
 
