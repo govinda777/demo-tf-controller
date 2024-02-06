@@ -79,20 +79,18 @@ flux reconcile source git flux-system
 
 ## Manual apply
 
-kubectl apply -f aws-credentials.yaml -n flux-system
+cd flux_tf_controller/clusters/my-cluster/gitrepositories
+
 kubectl apply -f iac-instance-ec2_repo.yaml -n flux-system
+
 kubectl apply -f iac-instance-ec2_terraform.yaml -n flux-system
 
 kubectl delete pod iac-instance-ec2-tf-runner -n flux-system
 
-tfctl replan iac-instance-ec2 -n flux-system --request-timeout 20m
-tfctl approve iac-instance-ec2 -n flux-system --request-timeout 20m
-tfctl reconcile iac-instance-ec2 -n flux-system --request-timeout 20m
-
 
 kubectl get terraform -n flux-system
 
-kubectl get logs -n flux-system iac-instance-ec2
+kubectl logs -n flux-system iac-instance-ec2-tf-runner
 
 ## Manual apply
 
@@ -101,5 +99,20 @@ kubectl annotate terraform -n flux-system iac-instance-ec2 terraform.fluxcd.io/a
 
 kubectl describe terraform iac-instance-ec2 -n flux-system
 
-kubectl logs -n flux-system -l app=flux,component=tf-controller
+## Como minitorar as astualizacoes da infra
 
+kubectl get terraform -n flux-system -w
+
+```bash
+
+➜ demo-tf-controller (main) ✗ kubectl get terraform -n flux-system -w
+NAME               READY     STATUS         AGE
+iac-instance-ec2   Unknown   Initializing   12m
+iac-instance-ec2   True      No drift: main@sha1:e1bd45d3ea59775576c361326284d175053c8659   12m
+iac-instance-ec2   Unknown   Reconciliation in progress                                     12m
+iac-instance-ec2   Unknown   Initializing                                                   12m
+iac-instance-ec2   True      No drift: main@sha1:e1bd45d3ea59775576c361326284d175053c8659   13m
+iac-instance-ec2   Unknown   Reconciliation in progress                                     14m
+iac-instance-ec2   Unknown   Initializing                                                   14m
+
+```

@@ -48,9 +48,9 @@ flux reconcile source git flux-system
 
 echo 'Install tfctl...'
 
-arch -arm64 brew install weaveworks/tap/tfctl
+#arch -arm64 brew install weaveworks/tap/tfctl
 
-tfctl install --namespace flux-system
+#tfctl install --namespace flux-system
 
 
 
