@@ -85,3 +85,9 @@ kubectl apply -f iac-instance-ec2_repo.yaml -n flux-system
 kubectl apply -f iac-instance-ec2_terraform.yaml -n flux-system
 
 kubectl delete pod iac-instance-ec2-tf-runner -n flux-system
+
+tfctl replan iac-instance-ec2 -n flux-system --request-timeout 20m
+
+tfctl approve iac-instance-ec2 -n flux-system --request-timeout 20m
+
+tfctl reconcile iac-instance-ec2 -n flux-system --request-timeout 20m
